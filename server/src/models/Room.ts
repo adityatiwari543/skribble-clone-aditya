@@ -37,9 +37,7 @@ export class Room {
 
   addPlayer(id: string, name: string): Player {
   const existing = this.players.find((p) => p.id === id);
-  if (existing) {
-    return existing;
-  }  // idempotent: same socket can't join twice
+  if (existing) return existing; 
 
   const isHost = this.players.length === 0;
   const player = new Player(id, name, isHost);
