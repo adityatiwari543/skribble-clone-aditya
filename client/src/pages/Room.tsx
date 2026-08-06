@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getSocket } from "../hooks/useSocket";
 import {
@@ -42,6 +42,8 @@ export default function RoomPage() {
   const [color, setColor] = useState("#232323");
   const [size, setSize] = useState(6);
   const [isEraser, setIsEraser] = useState(false);
+
+  const hasEmittedJoin = useRef(false);
 
   useEffect(() => {
     if (!roomId) return;
@@ -133,7 +135,8 @@ export default function RoomPage() {
     socket.on("game_over", handleGameOver);
 
     // If we don't already have a room (e.g. came here directly / refreshed), join it
-    if (!joined) {
+    if (!hasEmittedJoin.current) {
+      hasEmittedJoin.current = true;
       socket.emit("join_room", { roomId, playerName });
     }
 
